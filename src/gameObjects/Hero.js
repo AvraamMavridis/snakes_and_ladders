@@ -4,20 +4,55 @@ import inRange from "lodash/inRange";
 export default class Hero extends GameObject {
   constructor(scene) {
     super(scene);
-    this.hero = this.scene.add.sprite(
-      50,
-      this.config.boardHeight - 75,
-      "hero",
-      4
-    );
-    this.hero.scaleX = 0.7;
-    this.hero.scaleY = 0.7;
+    this.createHero();
   }
 
   stateDidUpdate({ state, prevState }) {
     if (this.hero) {
       this.setHeroPosition(state, prevState);
     }
+  }
+
+  /**
+   * Create the Hero sprite
+   *
+   * @param {number} [frameIndex=4]
+   * @memberof Hero
+   */
+  createHero(frameIndex = 4){
+    this.hero = this.scene.add.sprite(
+      50,
+      this.config.boardHeight - 75,
+      "hero",
+      frameIndex
+    );
+    this.hero.scaleX = 0.7;
+    this.hero.scaleY = 0.7;
+    this.createHeroAnimations();
+  }
+
+  /**
+   * Create and load the various animations for the Hero
+   *
+   * @memberof Hero
+   */
+  createHeroAnimations(){
+    const frames = this.scene.anims.generateFrameNumbers("hero");
+    this.createAnimation("walkBackwards", frames.slice(0,4), 5);
+    this.hero.anims.load("walkBackwards");
+    this.createAnimation("walkUp", frames.slice(12,16), 5);
+    this.hero.anims.load("walkUp");
+    this.createAnimation("walkForward", frames.slice(4,8), 5);
+    this.hero.anims.load("walkForward");
+  }
+
+  /**
+   * Clear sprite
+   *
+   * @memberof Hero
+   */
+  destroy(){
+    if(this.hero) this.hero.destroy();
   }
 
   /**
@@ -77,18 +112,22 @@ export default class Hero extends GameObject {
    * @memberof Hero
    */
   async setHeroPosition(state, prevState) {
-    const heroBoardPositions = state.heroPosition - prevState.heroPosition;
-    let moveForward = 0;
-
     for (let i = prevState.heroPosition; i < state.heroPosition; i++) {
       if (this.shouldMoveForward(i)) {
+        this.hero.anims.play("walkForward");
         await this.moveForward();
       } else if (this.shouldMoveUp(i)) {
+        this.hero.anims.play("walkUp");
         await this.moveUp();
       } else if (this.shouldMoveBackwards(i)) {
+        this.hero.anims.play("walkBackwards");
         await this.moveBackwards();
       }
     }
+
+    this.hero.anims.stop("walkForward");
+    this.hero.anims.stop("walkBackwards");
+    this.hero.anims.stop("walkUp");
   }
 
   /**

@@ -28,17 +28,6 @@ export default class Dice extends GameObject {
     return shuffle(frames);
   }
 
-  createAnimation() {
-    const cfg = {
-      key: "roll",
-      frames: this.getFrames(),
-      frameRate: 10,
-      repeat: -1
-    };
-
-    this.scene.anims.create(cfg);
-  }
-
   create(x = 50, y = 50) {
     return this.scene.add.sprite(x, y, "dice");
   }
@@ -48,7 +37,7 @@ export default class Dice extends GameObject {
   }
 
   animate() {
-    this.createAnimation();
+    this.createAnimation("roll", this.getFrames());
     this.diceAnim = this.dice.anims.load("roll");
     this.dice.anims.play("roll");
 

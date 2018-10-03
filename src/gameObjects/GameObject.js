@@ -14,4 +14,15 @@ export default class GameObject {
   stateDidUpdate(){
     throw new Error('Gameobject should implement this function');
   }
+
+  createAnimation(key, frames, frameRate = 10){
+    const cfg = {
+      key,
+      frames,
+      frameRate,
+      repeat: -1
+    };
+
+    this.scene.anims.create(cfg);
+  }
 }

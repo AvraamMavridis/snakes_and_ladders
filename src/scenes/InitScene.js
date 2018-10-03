@@ -18,7 +18,5 @@ export default class InitScene extends phaser.Scene {
 
       this.hero = new Hero(this);
       this.dice = new Dice(this);
-
-      this.hero.move(50)
     }
 }
