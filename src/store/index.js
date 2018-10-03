@@ -5,20 +5,23 @@ const initialState = {
   dice: -1,
   playerPosition: 0,
   rolls: 0,
-  dice_state: 'hidden'
+  dice_state: 'hidden',
+  heroPosition: 1,
 };
 
 const action = '';
 
-export const state = new BehaviorSubject(initialState);
+export const state = new BehaviorSubject({ state: initialState, prevState: {} });
 
 const store = new BehaviorSubject(action);
 export const dispatch = store.next.bind(store);
 
 store.subscribe({
-  next: (action, payload) => {
-    console.log(action, payload);
-    state.next(reducer(state.value, action, payload));
-    window.__state__ = state.value;
+  next: ({action, payload}) => {
+    state.next({
+      state: reducer(state.value.state, action, payload),
+      prevState: state.value.state,
+    });
+    window.state = state.value.state;
   }
 })
