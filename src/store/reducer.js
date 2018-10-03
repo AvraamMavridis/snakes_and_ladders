@@ -1,4 +1,4 @@
-import { ROLL_DICE, STOP_DICE, SET_DICE } from './actionTypes';
+import { ROLL_DICE, STOP_DICE, SET_DICE, SET_HERO_POSITION } from './actionTypes';
 
 export default (prevState, action, payload) => {
 
@@ -21,6 +21,12 @@ export default (prevState, action, payload) => {
         ...prevState,
         dice: payload,
         heroPosition: payload + prevState.heroPosition,
+      }
+    
+    case SET_HERO_POSITION: 
+      return {
+        ...prevState,
+        heroPosition: payload,
       }
   
     default:

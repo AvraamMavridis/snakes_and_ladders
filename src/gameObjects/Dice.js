@@ -44,7 +44,7 @@ export default class Dice extends GameObject {
     setTimeout(() => {
       stopDice();
       r = Math.random();
-    }, r * 2000);
+    }, r * 100);
   }
 
   pause() {

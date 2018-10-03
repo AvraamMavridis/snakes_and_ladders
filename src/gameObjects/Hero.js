@@ -1,5 +1,33 @@
 import GameObject from "./GameObject";
 import inRange from "lodash/inRange";
+import { sleep } from '../helpers';
+import { setHeroPosition } from '../store/actions';
+
+
+const snakePositions = {
+  98: 8,
+  92: 53,
+  62: 57,
+  56: 15,
+  51: 11
+}
+
+const laddersPositions = {
+  2: {
+    position: 38,
+    offsetX: 50,
+    offsetY: -150, 
+  },
+  4: {
+    position: 14,
+    offsetX: 150,
+    offsetY: -50, 
+  },
+  9: 31,
+  33: 85,
+  52: 88,
+  80: 99
+}
 
 export default class Hero extends GameObject {
   constructor(scene) {
@@ -44,6 +72,17 @@ export default class Hero extends GameObject {
     this.hero.anims.load("walkUp");
     this.createAnimation("walkForward", frames.slice(4,8), 5);
     this.hero.anims.load("walkForward");
+  }
+
+  /**
+   * Stop animations
+   *
+   * @memberof Hero
+   */
+  stopAnimations(){
+    this.hero.anims.stop("walkForward");
+    this.hero.anims.stop("walkBackwards");
+    this.hero.anims.stop("walkUp");
   }
 
   /**
@@ -112,7 +151,44 @@ export default class Hero extends GameObject {
    * @memberof Hero
    */
   async setHeroPosition(state, prevState) {
-    for (let i = prevState.heroPosition; i < state.heroPosition; i++) {
+    if(prevState.heroPosition === state.heroPosition) return;
+
+    if(!this.isOnLadders(prevState.heroPosition)){
+      await this.moveHero(prevState.heroPosition, state.heroPosition);
+      this.stopAnimations();
+      await sleep(2000); 
+    }
+
+    if(this.isOnLadders(state.heroPosition)){
+      const start = state.heroPosition;
+      const end = laddersPositions[start];
+      await this.moveAsync({ x: this.hero.x + end.offsetX, y: this.hero.y + end.offsetY });
+      setHeroPosition(end.position);
+    }
+  }
+
+  /**
+   * Check if the hero is on the root of a ladder
+   *
+   * @param {*} pos
+   * @returns
+   * @memberof Hero
+   */
+  isOnLadders(pos){
+    const posis = [...Object.keys(laddersPositions)]
+      .map(p => parseInt(p));
+    return posis.includes(pos)
+  }
+
+  /**
+   * Move hero step by step
+   *
+   * @param {number} start
+   * @param {number} end
+   * @memberof Hero
+   */
+  async moveHero(start, end){
+    for (let i = start; i < end; i++) {
       if (this.shouldMoveForward(i)) {
         this.hero.anims.play("walkForward");
         await this.moveForward();
@@ -124,10 +200,6 @@ export default class Hero extends GameObject {
         await this.moveBackwards();
       }
     }
-
-    this.hero.anims.stop("walkForward");
-    this.hero.anims.stop("walkBackwards");
-    this.hero.anims.stop("walkUp");
   }
 
   /**
@@ -175,9 +247,10 @@ export default class Hero extends GameObject {
    */
   moveAsync(movement) {
     return new Promise(resolve => {
-      this.scene.add.tween({
+      this.t = this.scene.add.tween({
         targets: this.hero,
         onComplete: resolve,
+        duration: 500,
         ...movement
       });
     });
