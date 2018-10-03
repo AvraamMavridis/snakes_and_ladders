@@ -1,6 +1,8 @@
 import phaser from 'phaser';
 import board from '../assets/board.jpg';
 import dice from '../assets/dice.png';
+import hero from '../assets/hero.png';
+
 
 export default class PreloadScene extends phaser.Scene {
     constructor () {
@@ -12,6 +14,7 @@ export default class PreloadScene extends phaser.Scene {
     preload () {
       this.load.image('board', board);
       this.load.spritesheet('dice', dice, { frameWidth: 46, frameHeight: 46 });
+      this.load.spritesheet('hero', hero, { frameWidth: 128, frameHeight: 128 });
 
       setTimeout(() => {
         this.scene.start('initscene')
