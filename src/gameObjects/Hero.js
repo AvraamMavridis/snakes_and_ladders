@@ -24,34 +24,123 @@ export default class Hero extends GameObject {
    * Determines if the Hero can be moved forward
    *
    * @param {number} pos
-   * @returns boolean
+   * @returns {boolean}
    * @memberof Hero
    */
   shouldMoveForward(pos) {
-    const inR = range => inRange(pos, ...range);
     const ranges = [[1, 10], [21, 30], [41, 50], [61, 70], [81, 90]];
+    return this.isInAnyRange(pos, ranges);
+  }
+
+  /**
+   * Determines if the Hero can be moved backwards
+   *
+   * @param {number} pos
+   * @returns {boolean}
+   * @memberof Hero
+   */
+  shouldMoveBackwards(pos) {
+    const ranges = [[11, 20], [31, 40], [51, 60], [71, 80], [91, 100]];
+    return this.isInAnyRange(pos, ranges);
+  }
+
+  /**
+   * Checks if the Hero position is in any of the passed ranges
+   *
+   * @param {number} pos
+   * @param {array<[]>} ranges
+   * @returns {boolean}
+   * @memberof Hero
+   */
+  isInAnyRange(pos, ranges) {
+    const inR = range => inRange(pos, ...range);
     return ranges.some(inR);
   }
 
-  setHeroPosition(state, prevState) {
-    const heroBoardPositions = state.heroPosition - prevState.heroPosition;
+  /**
+   * Checks if the Hero should move upwards
+   *
+   * @param {number} pos
+   * @returns
+   * @memberof Hero
+   */
+  shouldMoveUp(pos) {
+    const corners = [10, 20, 30, 40, 50, 60, 70, 80, 90];
+    return corners.includes(pos);
+  }
 
-    if (this.shouldMoveForward(state.heroPosition)) {
-      this.moveForward(heroBoardPositions * 50);
+  /**
+   * Moves the Hero in the board after dice roll
+   *
+   * @param {object} state
+   * @param {object} prevState
+   * @memberof Hero
+   */
+  async setHeroPosition(state, prevState) {
+    const heroBoardPositions = state.heroPosition - prevState.heroPosition;
+    let moveForward = 0;
+
+    for (let i = prevState.heroPosition; i < state.heroPosition; i++) {
+      if (this.shouldMoveForward(i)) {
+        await this.moveForward();
+      } else if (this.shouldMoveUp(i)) {
+        await this.moveUp();
+      } else if (this.shouldMoveBackwards(i)) {
+        await this.moveBackwards();
+      }
     }
   }
 
-  moveForward(offsetX = 0) {
-    const newPosition = this.hero.x + offsetX;
-
-    this.scene.add.tween({
-      targets: this.hero,
-      x: newPosition
-    });
+  /**
+   * Moves Hero backwards in the board
+   *
+   * @param {number} [offsetX=50]
+   * @returns {Promise}
+   * @memberof Hero
+   */
+  moveBackwards(offsetX = 50) {
+    const newPosition = this.hero.x - offsetX;
+    return this.moveAsync({ x: newPosition });
   }
 
-  move(x, y) {
-    this.hero.x = x || this.hero.x;
-    this.hero.y = y || this.hero.y;
+  /**
+   * Moves Hero Forward in the board
+   *
+   * @param {number} [offsetX=50]
+   * @returns {Promise}
+   * @memberof Hero
+   */
+  moveForward(offsetX = 50) {
+    const newPosition = this.hero.x + offsetX;
+    return this.moveAsync({ x: newPosition });
+  }
+
+  /**
+   * Moves Hero up in the board
+   *
+   * @param {number} [offsetX=50]
+   * @returns {Promise}
+   * @memberof Hero
+   */
+  moveUp(offsetY = 50) {
+    const newPosition = this.hero.y - offsetY;
+    return this.moveAsync({ y: newPosition });
+  }
+
+  /**
+   * Moves Hero
+   *
+   * @param {object} movement
+   * @returns {Promise}
+   * @memberof Hero
+   */
+  moveAsync(movement) {
+    return new Promise(resolve => {
+      this.scene.add.tween({
+        targets: this.hero,
+        onComplete: resolve,
+        ...movement
+      });
+    });
   }
 }
