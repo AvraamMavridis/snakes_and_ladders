@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import { dispatch } from '../store';
+import { rollDice } from '../store/actions';
 
 class Button extends Component {
-  onClick = () => {
-    dispatch('ROLL_DICE');
-  }
-
-
   render () {
     return (
-      <button onClick={this.onClick}>
+      <button onClick={rollDice}>
         Roll the dice
       </button>
     )
