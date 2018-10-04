@@ -3,10 +3,9 @@ import reducer from './reducer';
 
 const initialState = {
   dice: -1,
-  playerPosition: 0,
-  rolls: 0,
   dice_state: 'hidden',
-  heroPosition: 1,
+  players: {},
+  playingPlayer: 'player1'
 };
 
 const action = '';

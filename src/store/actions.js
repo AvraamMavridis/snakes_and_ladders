@@ -1,28 +1,44 @@
-import { dispatch } from '../store';
-import { ROLL_DICE, STOP_DICE, SET_DICE, SET_HERO_POSITION } from './actionTypes';
+import { dispatch } from "../store";
+import {
+  ROLL_DICE,
+  STOP_DICE,
+  SET_DICE,
+  SET_PLAYER_PROPS,
+  ADD_PLAYER
+} from "./actionTypes";
 
-export function rollDice(){
+export function rollDice() {
   dispatch({
-    action: ROLL_DICE,
+    action: ROLL_DICE
   });
 }
 
-export function stopDice(){
+export function stopDice() {
   dispatch({
-    action: STOP_DICE,
+    action: STOP_DICE
   });
 }
 
 export function setDice(payload) {
   dispatch({
     action: SET_DICE,
-    payload,
+    payload
   });
 }
 
-export function setHeroPosition(payload) {
+export function setPlayerProps(name, props) {
   dispatch({
-    action: SET_HERO_POSITION,
-    payload,
+    action: SET_PLAYER_PROPS,
+    payload: {
+      name,
+      props,
+    }
+  });
+}
+
+export function addPlayer(payload) {
+  dispatch({
+    action: ADD_PLAYER,
+    payload
   });
 }

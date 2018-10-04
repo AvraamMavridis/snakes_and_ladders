@@ -1,57 +1,55 @@
 import GameObject from "./GameObject";
 import inRange from "lodash/inRange";
-import { sleep } from '../helpers';
-import { setHeroPosition } from '../store/actions';
-
-
-const snakePositions = {
-  98: 8,
-  92: 53,
-  62: 57,
-  56: 15,
-  51: 11
-}
-
-const laddersPositions = {
-  2: {
-    position: 38,
-    offsetX: 50,
-    offsetY: -150, 
-  },
-  4: {
-    position: 14,
-    offsetX: 150,
-    offsetY: -50, 
-  },
-  9: 31,
-  33: 85,
-  52: 88,
-  80: 99
-}
+import { sleep } from "../helpers";
+import { setPlayerProps } from "../store/actions";
 
 export default class Hero extends GameObject {
-  constructor(scene) {
+  constructor(scene, name, sprite, initialPositionX = 50) {
     super(scene);
-    this.createHero();
+    this.name = name;
+    this.sprite = sprite;
+    this.createHero(4, initialPositionX);
   }
 
+  /**
+   * Called whenever the store is upaded
+   *
+   * @param {object} { state, prevState }
+   * @returns
+   * @memberof Hero
+   */
   stateDidUpdate({ state, prevState }) {
+    if (prevState.playingPlayer !== this.name) return;
+
     if (this.hero) {
       this.setHeroPosition(state, prevState);
     }
   }
 
   /**
+   * Returns the character position in the board
+   *
+   * @param {object} state
+   * @returns {number}
+   * @memberof Hero
+   */
+  getHeroPosition(state) {
+    const player = state.players[this.name];
+    return player ? state.players[this.name].position : 1;
+  }
+
+  /**
    * Create the Hero sprite
    *
    * @param {number} [frameIndex=4]
+   * @param {number} [initialPositionX=50]
    * @memberof Hero
    */
-  createHero(frameIndex = 4){
+  createHero(frameIndex = 4, initialPositionX = 50) {
     this.hero = this.scene.add.sprite(
-      50,
+      initialPositionX,
       this.config.boardHeight - 75,
-      "hero",
+      this.sprite,
       frameIndex
     );
     this.hero.scaleX = 0.7;
@@ -64,14 +62,14 @@ export default class Hero extends GameObject {
    *
    * @memberof Hero
    */
-  createHeroAnimations(){
-    const frames = this.scene.anims.generateFrameNumbers("hero");
-    this.createAnimation("walkBackwards", frames.slice(0,4), 5);
-    this.hero.anims.load("walkBackwards");
-    this.createAnimation("walkUp", frames.slice(12,16), 5);
-    this.hero.anims.load("walkUp");
-    this.createAnimation("walkForward", frames.slice(4,8), 5);
-    this.hero.anims.load("walkForward");
+  createHeroAnimations() {
+    const frames = this.scene.anims.generateFrameNumbers(this.sprite);
+    this.createAnimation(`${this.name}walkBackwards`, frames.slice(0, 4), 5);
+    this.hero.anims.load(`${this.name}walkBackwards`);
+    this.createAnimation(`${this.name}walkUp`, frames.slice(12, 16), 5);
+    this.hero.anims.load(`${this.name}walkUp`);
+    this.createAnimation(`${this.name}walkForward`, frames.slice(4, 8), 5);
+    this.hero.anims.load(`${this.name}walkForward`);
   }
 
   /**
@@ -79,10 +77,10 @@ export default class Hero extends GameObject {
    *
    * @memberof Hero
    */
-  stopAnimations(){
-    this.hero.anims.stop("walkForward");
-    this.hero.anims.stop("walkBackwards");
-    this.hero.anims.stop("walkUp");
+  stopAnimations() {
+    this.hero.anims.stop(`${this.name}walkForward`);
+    this.hero.anims.stop(`${this.name}walkBackwards`);
+    this.hero.anims.stop(`${this.name}walkUp`);
   }
 
   /**
@@ -90,8 +88,8 @@ export default class Hero extends GameObject {
    *
    * @memberof Hero
    */
-  destroy(){
-    if(this.hero) this.hero.destroy();
+  destroy() {
+    if (this.hero) this.hero.destroy();
   }
 
   /**
@@ -135,7 +133,7 @@ export default class Hero extends GameObject {
    * Checks if the Hero should move upwards
    *
    * @param {number} pos
-   * @returns
+   * @returns {boolean}
    * @memberof Hero
    */
   shouldMoveUp(pos) {
@@ -151,33 +149,41 @@ export default class Hero extends GameObject {
    * @memberof Hero
    */
   async setHeroPosition(state, prevState) {
-    if(prevState.heroPosition === state.heroPosition) return;
+    const currentPosition = this.getHeroPosition(state);
+    const prevPosition = this.getHeroPosition(prevState);
 
-    if(!this.isOnLadders(prevState.heroPosition)){
-      await this.moveHero(prevState.heroPosition, state.heroPosition);
+    if (currentPosition === prevPosition) return;
+
+    if (!this.isOnLadders(prevPosition)) {
+      await this.moveHero(prevPosition, currentPosition);
       this.stopAnimations();
-      await sleep(2000); 
+      await sleep(2000);
     }
 
-    if(this.isOnLadders(state.heroPosition)){
-      const start = state.heroPosition;
-      const end = laddersPositions[start];
-      await this.moveAsync({ x: this.hero.x + end.offsetX, y: this.hero.y + end.offsetY });
-      setHeroPosition(end.position);
+    if (this.isOnLadders(currentPosition)) {
+      const start = currentPosition;
+      const end = this.config.laddersPositions[start];
+      await this.moveAsync({
+        x: this.hero.x + end.offsetX,
+        y: this.hero.y + end.offsetY
+      });
+
+      setPlayerProps(this.name, { position: end.position });
     }
   }
 
   /**
    * Check if the hero is on the root of a ladder
    *
-   * @param {*} pos
-   * @returns
+   * @param {number} pos
+   * @returns {boolean}
    * @memberof Hero
    */
-  isOnLadders(pos){
-    const posis = [...Object.keys(laddersPositions)]
-      .map(p => parseInt(p));
-    return posis.includes(pos)
+  isOnLadders(pos) {
+    const posis = [...Object.keys(this.config.laddersPositions)].map(p =>
+      parseInt(p)
+    );
+    return posis.includes(pos);
   }
 
   /**
@@ -187,16 +193,16 @@ export default class Hero extends GameObject {
    * @param {number} end
    * @memberof Hero
    */
-  async moveHero(start, end){
+  async moveHero(start, end) {
     for (let i = start; i < end; i++) {
       if (this.shouldMoveForward(i)) {
-        this.hero.anims.play("walkForward");
+        this.hero.anims.play(`${this.name}walkForward`);
         await this.moveForward();
       } else if (this.shouldMoveUp(i)) {
-        this.hero.anims.play("walkUp");
+        this.hero.anims.play(`${this.name}walkUp`);
         await this.moveUp();
       } else if (this.shouldMoveBackwards(i)) {
-        this.hero.anims.play("walkBackwards");
+        this.hero.anims.play(`${this.name}walkBackwards`);
         await this.moveBackwards();
       }
     }
