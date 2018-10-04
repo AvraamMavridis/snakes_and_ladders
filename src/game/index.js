@@ -6,13 +6,17 @@ import config from '../config';
 const defaultConfig = {
     width: config.boardWidth,
     height: config.boardHeight,
-    parent: 'game-container',
     scene: [
       PreloadScene,
       InitScene,
     ]
 };
 
-export function createGame(config = defaultConfig){
-  return new phaser.Game(config);
+export function createGame(parent){
+  const config = {
+    ...defaultConfig,
+    parent,
+  }
+  const game = new phaser.Game(config);
+  return game;
 };

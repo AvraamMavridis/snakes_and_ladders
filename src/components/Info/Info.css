@@ -1,0 +1,14 @@
+.player-info {
+  color: white;
+  text-align: right;
+}
+
+.player-info:nth-of-type(2) {
+  color: white;
+  text-align: right;
+}
+
+
+.player-info > h3 {
+  text-transform: capitalize;
+}
