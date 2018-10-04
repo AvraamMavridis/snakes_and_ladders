@@ -1,3 +1,12 @@
-# Snakes and Ladders
+# Snakes and Ladders (WIP)
 
-<img src="https://raw.githubusercontent.com/AvraamMavridis/snakes_and_ladders/master/ladders_snakes.gif />
+That's small pet project - personal challenge:
+
+- Build a small multiplayer board game
+- User the Reducer pattern without using Redux
+- Create my own store mechanism
+- Learn Phaser
+- Marry Phaser's Scenes with React Components
+
+<img src="https://github.com/AvraamMavridis/snakes_and_ladders/blob/master/ladders_snakes.gif?raw=true" />
+
