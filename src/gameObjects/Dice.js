@@ -7,7 +7,7 @@ let r = Math.random();
 export default class Dice extends GameObject {
   constructor(scene) {
     super(scene);
-    this.dice = this.create();
+    this._gameObject = this.create();
   }
 
   stateDidUpdate({ state, prevState }) {
@@ -32,14 +32,10 @@ export default class Dice extends GameObject {
     return this.scene.add.sprite(x, y, "dice");
   }
 
-  destroy() {
-    this.dice.destroy();
-  }
-
   animate() {
-    this.createAnimation("roll", this.getFrames());
-    this.diceAnim = this.dice.anims.load("roll");
-    this.dice.anims.play("roll");
+    this.createAnimation({ key: "roll", frames: this.getFrames() });
+    this._gameObjectAnim = this._gameObject.anims.load("roll");
+    this._gameObject.anims.play("roll");
 
     setTimeout(() => {
       stopDice();
@@ -51,9 +47,9 @@ export default class Dice extends GameObject {
     const pausingFrames = Object.keys(this.config.pausingFrames).map(i => +i);
 
     const myVar = setInterval(() => {
-      const currentFrame = this.dice.anims.currentFrame.frame.name;
+      const currentFrame = this._gameObject.anims.currentFrame.frame.name;
       if (pausingFrames.includes(currentFrame)) {
-        this.dice.anims.stop("roll");
+        this._gameObject.anims.stop("roll");
         setDice(this.config.pausingFrames[`${currentFrame}`]);
         clearInterval(myVar);
       }

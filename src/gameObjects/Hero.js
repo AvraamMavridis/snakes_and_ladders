@@ -3,6 +3,13 @@ import inRange from "lodash/inRange";
 import { sleep } from "../helpers";
 import { setPlayerProps } from "../store/actions";
 
+/**
+ * Player Character
+ *
+ * @export
+ * @class Hero
+ * @extends {GameObject}
+ */
 export default class Hero extends GameObject {
   constructor(scene, name, sprite, initialPositionX = 50) {
     super(scene);
@@ -21,7 +28,7 @@ export default class Hero extends GameObject {
   stateDidUpdate({ state, prevState }) {
     if (prevState.playingPlayer !== this.name) return;
 
-    if (this.hero) {
+    if (this._gameObject) {
       this.setHeroPosition(state, prevState);
     }
   }
@@ -46,14 +53,14 @@ export default class Hero extends GameObject {
    * @memberof Hero
    */
   createHero(frameIndex = 4, initialPositionX = 50) {
-    this.hero = this.scene.add.sprite(
+    this._gameObject = this.scene.add.sprite(
       initialPositionX,
       this.config.boardHeight - 75,
       this.sprite,
       frameIndex
     );
-    this.hero.scaleX = 0.7;
-    this.hero.scaleY = 0.7;
+    this._gameObject.scaleX = 0.7;
+    this._gameObject.scaleY = 0.7;
     this.createHeroAnimations();
   }
 
@@ -64,12 +71,24 @@ export default class Hero extends GameObject {
    */
   createHeroAnimations() {
     const frames = this.scene.anims.generateFrameNumbers(this.sprite);
-    this.createAnimation(`${this.name}walkBackwards`, frames.slice(0, 4), 5);
-    this.hero.anims.load(`${this.name}walkBackwards`);
-    this.createAnimation(`${this.name}walkUp`, frames.slice(12, 16), 5);
-    this.hero.anims.load(`${this.name}walkUp`);
-    this.createAnimation(`${this.name}walkForward`, frames.slice(4, 8), 5);
-    this.hero.anims.load(`${this.name}walkForward`);
+    this.createAnimation({
+      key: `${this.name}walkBackwards`,
+      frames: frames.slice(0, 4),
+      frameRate: 5
+    });
+    this._gameObject.anims.load(`${this.name}walkBackwards`);
+    this.createAnimation({
+      key: `${this.name}walkUp`,
+      frames: frames.slice(12, 16),
+      frameRate: 5
+    });
+    this._gameObject.anims.load(`${this.name}walkUp`);
+    this.createAnimation({
+      key: `${this.name}walkForward`,
+      frames: frames.slice(4, 8),
+      frameRate: 5
+    });
+    this._gameObject.anims.load(`${this.name}walkForward`);
   }
 
   /**
@@ -78,18 +97,9 @@ export default class Hero extends GameObject {
    * @memberof Hero
    */
   stopAnimations() {
-    this.hero.anims.stop(`${this.name}walkForward`);
-    this.hero.anims.stop(`${this.name}walkBackwards`);
-    this.hero.anims.stop(`${this.name}walkUp`);
-  }
-
-  /**
-   * Clear sprite
-   *
-   * @memberof Hero
-   */
-  destroy() {
-    if (this.hero) this.hero.destroy();
+    this._gameObject.anims.stop(`${this.name}walkForward`);
+    this._gameObject.anims.stop(`${this.name}walkBackwards`);
+    this._gameObject.anims.stop(`${this.name}walkUp`);
   }
 
   /**
@@ -164,8 +174,8 @@ export default class Hero extends GameObject {
       const start = currentPosition;
       const end = this.config.laddersPositions[start];
       await this.moveAsync({
-        x: this.hero.x + end.offsetX,
-        y: this.hero.y + end.offsetY
+        x: this._gameObject.x + end.offsetX,
+        y: this._gameObject.y + end.offsetY
       });
 
       setPlayerProps(this.name, { position: end.position });
@@ -196,13 +206,13 @@ export default class Hero extends GameObject {
   async moveHero(start, end) {
     for (let i = start; i < end; i++) {
       if (this.shouldMoveForward(i)) {
-        this.hero.anims.play(`${this.name}walkForward`);
+        this._gameObject.anims.play(`${this.name}walkForward`);
         await this.moveForward();
       } else if (this.shouldMoveUp(i)) {
-        this.hero.anims.play(`${this.name}walkUp`);
+        this._gameObject.anims.play(`${this.name}walkUp`);
         await this.moveUp();
       } else if (this.shouldMoveBackwards(i)) {
-        this.hero.anims.play(`${this.name}walkBackwards`);
+        this._gameObject.anims.play(`${this.name}walkBackwards`);
         await this.moveBackwards();
       }
     }
@@ -216,7 +226,7 @@ export default class Hero extends GameObject {
    * @memberof Hero
    */
   moveBackwards(offsetX = 50) {
-    const newPosition = this.hero.x - offsetX;
+    const newPosition = this._gameObject.x - offsetX;
     return this.moveAsync({ x: newPosition });
   }
 
@@ -228,7 +238,7 @@ export default class Hero extends GameObject {
    * @memberof Hero
    */
   moveForward(offsetX = 50) {
-    const newPosition = this.hero.x + offsetX;
+    const newPosition = this._gameObject.x + offsetX;
     return this.moveAsync({ x: newPosition });
   }
 
@@ -240,25 +250,7 @@ export default class Hero extends GameObject {
    * @memberof Hero
    */
   moveUp(offsetY = 50) {
-    const newPosition = this.hero.y - offsetY;
+    const newPosition = this._gameObject.y - offsetY;
     return this.moveAsync({ y: newPosition });
-  }
-
-  /**
-   * Moves Hero
-   *
-   * @param {object} movement
-   * @returns {Promise}
-   * @memberof Hero
-   */
-  moveAsync(movement) {
-    return new Promise(resolve => {
-      this.t = this.scene.add.tween({
-        targets: this.hero,
-        onComplete: resolve,
-        duration: 500,
-        ...movement
-      });
-    });
   }
 }
