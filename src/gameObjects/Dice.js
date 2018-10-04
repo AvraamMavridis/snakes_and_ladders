@@ -4,12 +4,26 @@ import { setDice, stopDice } from "../store/actions";
 
 let r = Math.random();
 
+/**
+ * Dice
+ *
+ * @export
+ * @class Dice
+ * @extends {GameObject}
+ */
 export default class Dice extends GameObject {
   constructor(scene) {
     super(scene);
-    this._gameObject = this.create();
+    this.create();
   }
 
+  /**
+   * Called whenever the store is upaded
+   *
+   * @param {object} { state, prevState }
+   * @returns
+   * @memberof Hero
+   */
   stateDidUpdate({ state, prevState }) {
     if (state.dice_state === "rolling") {
       this.animate();
@@ -20,6 +34,12 @@ export default class Dice extends GameObject {
     }
   }
 
+  /**
+   * Generate frames out of sprite sheet
+   *
+   * @returns {array<Frame>}
+   * @memberof Dice
+   */
   getFrames() {
     let frames = this.scene.anims.generateFrameNumbers("dice");
     frames = frames.filter(
@@ -28,19 +48,30 @@ export default class Dice extends GameObject {
     return shuffle(frames);
   }
 
+  /**
+   * Creates the dice gameobject
+   *
+   * @param {number} [x=50]
+   * @param {number} [y=50]
+   * @returns
+   * @memberof Dice
+   */
   create(x = 50, y = 50) {
-    return this.scene.add.sprite(x, y, "dice");
+    this._gameObject = this.scene.add.sprite(x, y, "dice");
   }
 
   animate() {
-    this.createAnimation({ key: "roll", frames: this.getFrames() });
+    this.createAnimation({
+      key: "roll",
+      frames: this.getFrames(),
+    });
     this._gameObjectAnim = this._gameObject.anims.load("roll");
     this._gameObject.anims.play("roll");
 
-    setTimeout(() => {
-      stopDice();
-      r = Math.random();
-    }, r * 100);
+    // setTimeout(() => {
+    //   stopDice();
+    //   r = Math.random();
+    // }, r * 100);
   }
 
   pause() {
