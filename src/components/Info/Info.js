@@ -21,6 +21,10 @@ export default class Info extends Component {
     });
   }
 
+  getPlayerName(){
+    return this.props.player === 'player1' ? 'You' : 'Computer'
+  }
+
   render() {
     const playerContainer = classNames("player-info-container", {
       "playing-player": this.state.playingPlayer === this.props.player,
@@ -29,7 +33,7 @@ export default class Info extends Component {
     return (
       <div className="player-info">
         <div className={playerContainer}>
-          <h3>{this.props.player}</h3>
+          <h3>{this.getPlayerName()}</h3>
           <h5>Position: {this.state.position}</h5>
           <h5>Rolls: {this.state.rolls}</h5>
         </div>

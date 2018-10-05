@@ -1,0 +1,15 @@
+.rules {
+  padding: 10px;
+  margin: 0px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  max-width: 250px;
+  background: var(--greenish);
+}
+
+.rules > a {
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+}

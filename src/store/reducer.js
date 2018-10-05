@@ -37,7 +37,13 @@ export default (prevState, action, payload) => {
         position: payload + prevState.players[player].position
       };
 
-      const playingPlayer = player === 'player1' && payload !== 6 ? 'player2' : 'player1';
+      let playingPlayer;
+
+      if(payload === 6){
+        playingPlayer = player;
+      } else {
+        playingPlayer = player === 'player1' ? 'player2' : 'player1';
+      }
 
       return {
         ...prevState,

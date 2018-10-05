@@ -12,36 +12,51 @@ class PlayingBar extends Component {
 
   componentDidMount() {
     state.subscribe({
-      next: ({ state }) => {
+      next: ({ state, prevState }) => {
         this.setState({
           playingPlayer: state.playingPlayer,
           dice: state.dice,
           diceState: state.diceState
         });
+
+        if (
+          (state.playingPlayer === "player2" &&
+            prevState.playingPlayer === "player1") 
+            // || (state.playingPlayer === "player2" &&
+            // prevState.playingPlayer === "player2" &&
+            // state.dice === 6)
+        ) {
+          setTimeout(() => rollDice(), 3000);
+        }
       }
     });
   }
 
   getPlayerName() {
-    return this.state.playingPlayer.includes("1") ? "Player 1" : "Player 2";
+    return this.state.playingPlayer.includes("1") ? "You" : "Computer";
   }
 
   render() {
+    const player = this.getPlayerName();
+
     return (
       <div className="playing-bar">
         <div className="labels-container">
           <label>
-            <strong>Player to play: </strong>
-            {this.getPlayerName()}
+            <strong>Playing: </strong>
+            <span className={player.toLowerCase()}>{player}</span>
           </label>
           <label>
             <strong>Last Dice: </strong>
-            {this.state.dice}
+            {this.state.dice > 0 ? this.state.dice : "-"}
           </label>
         </div>
         <div className="button-container">
           <button
-            disabled={this.state.diceState === "rolling"}
+            disabled={
+              this.state.diceState === "rolling" ||
+              this.state.playingPlayer === "player2"
+            }
             onClick={rollDice}
           >
             Roll the dice

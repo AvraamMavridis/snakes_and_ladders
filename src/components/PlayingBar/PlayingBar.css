@@ -36,3 +36,15 @@
 .labels-container label{
   display: block;
 }
+
+.you {
+  color: var(--yellow);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.computer {
+  color: var(--red);
+  font-size: 18px;
+  font-weight: bold;
+}

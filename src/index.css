@@ -1,8 +1,9 @@
 :root {
   --bg-color: linear-gradient(90deg, rgba(66,61,85,1) 0%, rgba(129,123,152,1) 100%);;
-  --yellow: #FFEA00;
+  --yellow: #FFF000;
   --blue: #312C40;
-  --red: #A13314;
+  --red: #EB3A44;
+  --greenish: #76c9dc;
 }
 
 
