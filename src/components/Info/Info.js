@@ -1,31 +1,39 @@
-import React, { Component, PropTypes } from 'react'
-import { state } from '../../store';
-import './Info.css';
+import React, { Component } from "react";
+import { state } from "../../store";
+import classNames from "classnames";
+import "./Info.css";
 
 export default class Info extends Component {
   state = {
     position: 1,
     rolls: 0,
-  }
+    playingPlayer: "player1"
+  };
 
   componentDidMount() {
     state.subscribe({
       next: ({ state }) => {
-        this.setState({ ...state.players[this.props.player]})
+        this.setState({
+          ...state.players[this.props.player],
+          playingPlayer: state.playingPlayer
+        });
       }
-    })
+    });
   }
-  
 
-  render () {
+  render() {
+    const playerContainer = classNames("player-info-container", {
+      "playing-player": this.state.playingPlayer === this.props.player,
+    });
+
     return (
-      <div className='player-info'>
-        <div className='player-info-container'>
+      <div className="player-info">
+        <div className={playerContainer}>
           <h3>{this.props.player}</h3>
           <h5>Position: {this.state.position}</h5>
           <h5>Rolls: {this.state.rolls}</h5>
         </div>
       </div>
-    )
+    );
   }
 }

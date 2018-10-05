@@ -18,7 +18,7 @@ export default (prevState, action, payload) => {
 
       return {
         ...prevState,
-        dice_state: "rolling",
+        diceState: "rolling",
         players
       };
     }
@@ -26,7 +26,7 @@ export default (prevState, action, payload) => {
     case STOP_DICE:
       return {
         ...prevState,
-        dice_state: "pause"
+        diceState: "pause"
       };
 
     case SET_DICE: {
@@ -37,7 +37,7 @@ export default (prevState, action, payload) => {
         position: payload + prevState.players[player].position
       };
 
-      const playingPlayer = player === 'player1' ? 'player2' : 'player1';
+      const playingPlayer = player === 'player1' && payload !== 6 ? 'player2' : 'player1';
 
       return {
         ...prevState,

@@ -3,7 +3,7 @@ import reducer from './reducer';
 
 const initialState = {
   dice: -1,
-  dice_state: 'hidden',
+  diceState: 'hidden',
   players: {},
   playingPlayer: 'player1'
 };

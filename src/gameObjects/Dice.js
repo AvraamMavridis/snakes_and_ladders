@@ -24,7 +24,7 @@ export default class Dice extends GameObject {
    * @memberof Hero
    */
   stateDidUpdate({ state, prevState }) {
-    if (state.dice_state === "rolling") {
+    if (state.diceState === "rolling") {
       this.animate();
     }
   }

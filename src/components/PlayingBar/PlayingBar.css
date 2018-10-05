@@ -20,6 +20,14 @@
   outline: none;
 }
 
+.playing-bar button[disabled], .playing-bar button[disabled]:hover {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: grey;
+  color: lightgrey;
+  border: lightgrey;
+}
+
 .playing-bar button:hover {
   background: var(--yellow);
   color: var(--blue);
