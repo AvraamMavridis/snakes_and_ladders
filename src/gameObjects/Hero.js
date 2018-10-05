@@ -3,6 +3,8 @@ import inRange from "lodash/inRange";
 import { sleep } from "../helpers";
 import { setPlayerProps } from "../store/actions";
 
+window.setPlayerProps = setPlayerProps; // temporary for debuggin
+
 /**
  * Player Character
  *
@@ -16,6 +18,7 @@ export default class Hero extends GameObject {
     this._gameObject.scaleX = 0.7;
     this._gameObject.scaleY = 0.7;
     this.createHeroAnimations();
+    window.moveHero = this.hero;
   }
 
   /**
@@ -172,6 +175,10 @@ export default class Hero extends GameObject {
 
       setPlayerProps(this.name, { position: end.position });
     }
+
+    if(currentPosition > 100) {
+      setPlayerProps(this.name, { position: 200 - currentPosition });
+    }
   }
 
   /**
@@ -210,16 +217,24 @@ export default class Hero extends GameObject {
    * @memberof Hero
    */
   async moveHero(start, end) {
+    end = end > 100 ? end + 1 : end;
+  
     for (let i = start; i < end; i++) {
-      if (this.shouldMoveForward(i)) {
+      const current = i;
+      const move = i > 100 ? (200 - i) : i;
+
+      if (this.shouldMoveForward(move) && current <= 100) {
         this._gameObject.anims.play(`${this.name}walkForward`);
         await this.moveForward();
-      } else if (this.shouldMoveUp(i)) {
+      } else if (this.shouldMoveUp(move) && current <= 100) {
         this._gameObject.anims.play(`${this.name}walkUp`);
         await this.moveUp();
-      } else if (this.shouldMoveBackwards(i)) {
+      } else if (this.shouldMoveBackwards(move) && current <= 100) {
         this._gameObject.anims.play(`${this.name}walkBackwards`);
         await this.moveBackwards();
+      } else if(current > 100) {
+        this._gameObject.anims.play(`${this.name}walkForward`);
+        await this.moveForward();
       }
     }
   }
