@@ -20,9 +20,11 @@ export default class Info extends Component {
   render () {
     return (
       <div className='player-info'>
-        <h3>{this.props.player}</h3>
-        <h5>Position: {this.state.position}</h5>
-        <h5>Rolls: {this.state.rolls}</h5>
+        <div className='player-info-container'>
+          <h3>{this.props.player}</h3>
+          <h5>Position: {this.state.position}</h5>
+          <h5>Rolls: {this.state.rolls}</h5>
+        </div>
       </div>
     )
   }

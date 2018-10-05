@@ -5,22 +5,32 @@ import './PlayingBar.css';
 
 class PlayingBar extends Component {
   state = {
-    playingPlayer: "player1"
+    playingPlayer: "player1",
+    dice: -1,
   };
 
   componentDidMount() {
     state.subscribe({
       next: ({ state }) => {
-        this.setState({ playingPlayer: state.playingPlayer });
+        this.setState({ playingPlayer: state.playingPlayer, dice: state.dice });
       }
     });
+  }
+
+  getPlayerName(){
+    return this.state.playingPlayer.includes('1') ? 'Player 1' : 'Player 2';
   }
 
   render() {
     return (
       <div className="playing-bar">
-        <label><strong>Player: </strong>{this.state.playingPlayer}</label>
-        <button onClick={rollDice}>Roll the dice</button>
+        <div className='labels-container'>
+          <label><strong>Player to play: </strong>{this.getPlayerName()}</label>
+          <label><strong>Last Dice: </strong>{this.state.dice}</label>
+        </div>
+        <div className='button-container'>
+          <button onClick={rollDice}>Roll the dice</button>
+        </div>
       </div>
     );
   }

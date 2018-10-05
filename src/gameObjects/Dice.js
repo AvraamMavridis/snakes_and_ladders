@@ -68,6 +68,8 @@ export default class Dice extends GameObject {
     this._gameObjectAnim = this._gameObject.anims.load("roll");
     this._gameObject.anims.play("roll");
 
+    this.moveAsync({ x: Math.random() * 400, y: Math.random() * 400 });
+
     setTimeout(() => {
       stopDice();
       r = Math.random();

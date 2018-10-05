@@ -6,7 +6,27 @@
   text-align: right;
 }
 
+.player-info .player-info-container {
+  height: 300px;
+  clip-path: ellipse(77% 64% at 23% 36%);
+  color: white;
+  width: 90px;
+}
+
+.player-info:first-of-type .player-info-container {
+  clip-path: ellipse(75% 59% at 75% 41%);
+  background: var(--yellow);
+  color: var(--blue);
+}
+
 
 .player-info > h3 {
   text-transform: capitalize;
+}
+
+.player-info-container {
+  display: inline-block;
+  padding: 5%;
+  background: var(--red);
+  color: var(--blue);
 }

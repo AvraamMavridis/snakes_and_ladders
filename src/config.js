@@ -32,7 +32,7 @@ export default {
       offsetY: -150, 
     },
     33: {
-      position: 33,
+      position: 85,
       offsetX: -150,
       offsetY: -250, 
     },
@@ -48,10 +48,30 @@ export default {
     },
   },
   snakePositions: {
-    98: 8,
-    92: 53,
-    62: 57,
-    56: 15,
-    51: 11
+    98: {
+      position: 8,
+      offsetX: 250,
+      offsetY: 450, 
+    },
+    92:{
+      position: 53,
+      offsetX: -50,
+      offsetY: 200, 
+    },
+    62: {
+      position: 57,
+      offsetX: 100,
+      offsetY: 50, 
+    },
+    56: {
+      position: 15,
+      offsetX: 50,
+      offsetY: 200, 
+    },
+    51: {
+      position: 11,
+      offsetX: 0,
+      offsetY: 200, 
+    },
   }
 }

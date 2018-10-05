@@ -164,7 +164,7 @@ export default class Hero extends GameObject {
 
     if (currentPosition === prevPosition) return;
 
-    if (!this.isOnLadders(prevPosition)) {
+    if (!this.isOnLadders(prevPosition) && !this.isOnSnakes(prevPosition)) {
       await this.moveHero(prevPosition, currentPosition);
       this.stopAnimations();
       await sleep(100);
@@ -173,6 +173,17 @@ export default class Hero extends GameObject {
     if (this.isOnLadders(currentPosition)) {
       const start = currentPosition;
       const end = this.config.laddersPositions[start];
+      await this.moveAsync({
+        x: this._gameObject.x + end.offsetX,
+        y: this._gameObject.y + end.offsetY
+      });
+
+      setPlayerProps(this.name, { position: end.position });
+    }
+
+    if (this.isOnSnakes(currentPosition)) {
+      const start = currentPosition;
+      const end = this.config.snakePositions[start];
       await this.moveAsync({
         x: this._gameObject.x + end.offsetX,
         y: this._gameObject.y + end.offsetY
@@ -191,6 +202,20 @@ export default class Hero extends GameObject {
    */
   isOnLadders(pos) {
     const posis = [...Object.keys(this.config.laddersPositions)].map(p =>
+      parseInt(p)
+    );
+    return posis.includes(pos);
+  }
+
+  /**
+   * Check if the hero is on the head of a snake
+   *
+   * @param {number} pos
+   * @returns {boolean}
+   * @memberof Hero
+   */
+  isOnSnakes(pos) {
+    const posis = [...Object.keys(this.config.snakePositions)].map(p =>
       parseInt(p)
     );
     return posis.includes(pos);

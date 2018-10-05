@@ -1,3 +1,11 @@
+:root {
+  --bg-color: linear-gradient(90deg, rgba(66,61,85,1) 0%, rgba(129,123,152,1) 100%);;
+  --yellow: #FFEA00;
+  --blue: #312C40;
+  --red: #A13314;
+}
+
+
 body {
   margin: 0;
   padding: 0;
@@ -6,13 +14,14 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: black;
-  color: white;
+  background: var(--bg-color);
+  background-image: url('https://images.pexels.com/photos/139306/pexels-photo-139306.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260');
+  color: var(--blue);
 }
 
 .container {
   display: grid;
-  grid-template-columns: auto 600px auto;
+  grid-template-columns: auto 560px auto;
 }
 
 .game-wrapper {
