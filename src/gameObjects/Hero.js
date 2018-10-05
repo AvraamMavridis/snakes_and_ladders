@@ -167,7 +167,7 @@ export default class Hero extends GameObject {
     if (!this.isOnLadders(prevPosition)) {
       await this.moveHero(prevPosition, currentPosition);
       this.stopAnimations();
-      await sleep(2000);
+      await sleep(100);
     }
 
     if (this.isOnLadders(currentPosition)) {

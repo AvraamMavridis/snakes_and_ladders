@@ -1,0 +1,8 @@
+.playing-bar {
+  color: red;
+  width: 80%;
+}
+
+.playing-bar button {
+  float: right;
+}

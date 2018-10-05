@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createGame } from './game';
-import Button from './components/Button';
+import PlayingBar from './components/PlayingBar/PlayingBar';
 import Info from './components/Info/Info';
 
 
@@ -16,7 +16,7 @@ export default class App extends Component {
           <Info player="player1" />
           <div className='game-wrapper'>
             <div ref={el => (this.el = el)} />
-            <Button />
+            <PlayingBar />
           </div>
           <Info player="player2" />
         </div>
