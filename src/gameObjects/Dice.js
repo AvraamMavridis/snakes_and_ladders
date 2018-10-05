@@ -2,7 +2,6 @@ import GameObject from "./GameObject";
 import shuffle from "lodash/shuffle";
 import { setDice, stopDice } from "../store/actions";
 
-let r = Math.random();
 
 /**
  * Dice
@@ -12,6 +11,11 @@ let r = Math.random();
  * @extends {GameObject}
  */
 export default class Dice extends GameObject {
+  constructor(scene, x, y, name, frameIndex){
+    super(scene, x, y, name, frameIndex);
+    this._gameObjectAnim = this._gameObject.anims.load("roll");
+  }
+
   /**
    * Called whenever the store is upaded
    *
@@ -22,10 +26,6 @@ export default class Dice extends GameObject {
   stateDidUpdate({ state, prevState }) {
     if (state.dice_state === "rolling") {
       this.animate();
-    }
-
-    if (state.dice_state === "pause" && prevState.dice_state === "rolling") {
-      this.pause();
     }
   }
 
@@ -56,32 +56,27 @@ export default class Dice extends GameObject {
   }
 
   animate() {
+    const frames = this.getFrames();
+    const pausingFramesIndexes = Object.keys(this.config.pausingFrames).map(i => +i);
+    const pausingFrames = frames.filter(fr => pausingFramesIndexes.includes(fr.frame));
+    
     this.createAnimation({
       key: "roll",
-      frames: this.getFrames(),
+      frames,
       duration: 2000,
     });
-    this._gameObjectAnim = this._gameObject.anims.load("roll");
+  
     this._gameObject.anims.play("roll");
 
-    this.moveAsync({ x: Math.random() * 400, y: Math.random() * 400 }, 2000);
+    const f = pausingFrames[Math.floor(Math.random() * 12)];
 
-    setTimeout(() => {
-      stopDice();
-      r = Math.random();
-    }, r * 100);
-  }
-
-  pause() {
-    const pausingFrames = Object.keys(this.config.pausingFrames).map(i => +i);
-
-    const myVar = setInterval(() => {
-      const currentFrame = this._gameObject.anims.currentFrame.frame.name;
-      if (pausingFrames.includes(currentFrame)) {
-        this._gameObject.anims.stop("roll");
-        setDice(this.config.pausingFrames[`${currentFrame}`]);
-        clearInterval(myVar);
+    this.moveAsync({ x: Math.random() * 400 + 50, y: Math.random() * 400 + 50,
+      onComplete: () => {
+        this._gameObject.anims.stop();
+        this._gameObject.setFrame(f.frame);
+        stopDice();
+        setDice(this.config.pausingFrames[`${f.frame}`]);
       }
-    }, Math.floor(Math.random() * 300) + 50);
+    }, 1700);
   }
 }

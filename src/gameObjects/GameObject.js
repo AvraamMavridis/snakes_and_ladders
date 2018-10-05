@@ -43,7 +43,7 @@ export default class GameObject {
   }
 
   onAnimationComplete(){
-    console.info('Can be implemented by dirived classes')
+    // console.info('Can be implemented by dirived classes')
   }
 
   /**
@@ -77,9 +77,14 @@ export default class GameObject {
    */
   moveAsync(movement, duration) {
     return new Promise(resolve => {
+      const onComplete = movement.onComplete ? (...args) => {
+        movement.onComplete(...args);
+        resolve();
+      } : resolve;
+
       this.t = this.scene.add.tween({
         targets: this._gameObject,
-        onComplete: resolve,
+        onComplete,
         duration: duration || 500,
         ...movement
       });
