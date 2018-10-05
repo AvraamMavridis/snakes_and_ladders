@@ -12,11 +12,6 @@ let r = Math.random();
  * @extends {GameObject}
  */
 export default class Dice extends GameObject {
-  constructor(scene) {
-    super(scene);
-    this.create();
-  }
-
   /**
    * Called whenever the store is upaded
    *
@@ -64,11 +59,12 @@ export default class Dice extends GameObject {
     this.createAnimation({
       key: "roll",
       frames: this.getFrames(),
+      duration: 2000,
     });
     this._gameObjectAnim = this._gameObject.anims.load("roll");
     this._gameObject.anims.play("roll");
 
-    this.moveAsync({ x: Math.random() * 400, y: Math.random() * 400 });
+    this.moveAsync({ x: Math.random() * 400, y: Math.random() * 400 }, 2000);
 
     setTimeout(() => {
       stopDice();

@@ -15,8 +15,8 @@ export default class PreloadScene extends phaser.Scene {
     preload () {
       this.load.image('board', board);
       this.load.spritesheet('dice', dice, { frameWidth: 46, frameHeight: 46 });
-      this.load.spritesheet('hero2', hero2, { frameWidth: 128, frameHeight: 128 });
-      this.load.spritesheet('hero', hero, { frameWidth: 128, frameHeight: 128 });
+      this.load.spritesheet('player2', hero2, { frameWidth: 128, frameHeight: 128 });
+      this.load.spritesheet('player1', hero, { frameWidth: 128, frameHeight: 128 });
 
       setTimeout(() => {
         this.scene.start('initscene')

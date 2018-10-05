@@ -11,11 +11,11 @@ import { setPlayerProps } from "../store/actions";
  * @extends {GameObject}
  */
 export default class Hero extends GameObject {
-  constructor(scene, name, sprite, initialPositionX = 50) {
-    super(scene);
-    this.name = name;
-    this.sprite = sprite;
-    this.createHero(4, initialPositionX);
+  constructor(...args) {
+    super(...args);
+    this._gameObject.scaleX = 0.7;
+    this._gameObject.scaleY = 0.7;
+    this.createHeroAnimations();
   }
 
   /**
@@ -43,25 +43,6 @@ export default class Hero extends GameObject {
   getHeroPosition(state) {
     const player = state.players[this.name];
     return player ? state.players[this.name].position : 1;
-  }
-
-  /**
-   * Create the Hero sprite
-   *
-   * @param {number} [frameIndex=4]
-   * @param {number} [initialPositionX=50]
-   * @memberof Hero
-   */
-  createHero(frameIndex = 4, initialPositionX = 50) {
-    this._gameObject = this.scene.add.sprite(
-      initialPositionX,
-      this.config.boardHeight - 75,
-      this.sprite,
-      frameIndex
-    );
-    this._gameObject.scaleX = 0.7;
-    this._gameObject.scaleY = 0.7;
-    this.createHeroAnimations();
   }
 
   /**

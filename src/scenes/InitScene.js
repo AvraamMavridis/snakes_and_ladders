@@ -16,10 +16,10 @@ export default class InitScene extends phaser.Scene {
       this.staticBg.scaleY = 0.5;
       this.staticBg.scaleX = 0.5;
 
-      this.hero = new Hero(this, 'player1', 'hero', 50);
+      this.hero = new Hero(this, 60, config.boardHeight - 75, 'player1', 0);
       addPlayer('player1');
-      this.hero2 = new Hero(this, 'player2', 'hero2', 60);
+      this.hero2 = new Hero(this, 50, config.boardHeight - 75, 'player2', 0);
       addPlayer('player2');
-      this.dice = new Dice(this);
+      this.dice = new Dice(this, 100, 100, 'dice', 0);
     }
 }
