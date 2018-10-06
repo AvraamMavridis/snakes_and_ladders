@@ -33,6 +33,10 @@
   color: var(--blue);
 }
 
+.labels-container {
+  min-height: 50px;
+}
+
 .labels-container label{
   display: block;
 }

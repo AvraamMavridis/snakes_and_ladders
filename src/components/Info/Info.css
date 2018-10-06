@@ -13,10 +13,12 @@
   color: white;
 }
 
-.player-info:first-of-type .player-info-container {
+.player-info-container.player1 {
   clip-path: ellipse(75% 59% at 75% 41%);
   background: var(--yellow);
   color: var(--blue);
+  padding: 5%;
+  float: right;
 }
 
 
@@ -24,9 +26,10 @@
   text-transform: capitalize;
 }
 
-.player-info-container {
-  display: inline-block;
+.player-info-container.player2 {
   padding: 5%;
+  text-align: left;
+  float: left;
   background: var(--red);
   color: var(--blue);
 }

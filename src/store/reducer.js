@@ -5,19 +5,36 @@ import {
   SET_PLAYER_PROPS,
 } from "./actionTypes";
 import initialState from './initialState';
+import config from '../config';
 
-const getPlayer = (dice, current) => {
+/**
+ * Returns the player that should play
+ * in the next turn
+ *
+ * @param {number} dice
+ * @param {string} current
+ * @returns {string}
+ */
+const getPlayer = (dice, currentPlayer) => {
   let playingPlayer;
 
-  if(dice === 6){
-    playingPlayer = current;
+  if(dice === config.diceRerollPosition){
+    playingPlayer = currentPlayer;
   } else {
-    playingPlayer = current === 'player1' ? 'player2' : 'player1';
+    playingPlayer = currentPlayer === 'player1' ? 'player2' : 'player1';
   }
 
   return playingPlayer;
 }
 
+/**
+ * Modifies the state of the game
+ *
+ * @param {object} prevState
+ * @param {string} action
+ * @param {payload} payload
+ * @returns {string}
+ */
 export default (prevState, action, payload) => {
   switch (action) {
     case RESET_GAME: {
@@ -37,9 +54,9 @@ export default (prevState, action, payload) => {
       };
 
       let isOn100;
-      if (players.player1.position === 100) {
+      if (players.player1.position === config.winningPosition) {
         isOn100 = "You";
-      } else if (players.player2.position === 100) {
+      } else if (players.player2.position === config.winningPosition) {
         isOn100 = "Computer";
       }
 
@@ -60,9 +77,9 @@ export default (prevState, action, payload) => {
       };
 
       let isOn100;
-      if (players.player1.position === 100) {
+      if (players.player1.position === config.winningPosition) {
         isOn100 = "You";
-      } else if (players.player2.position === 100) {
+      } else if (players.player2.position === config.winningPosition) {
         isOn100 = "Computer";
       }
 

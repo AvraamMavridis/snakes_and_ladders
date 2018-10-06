@@ -3,6 +3,7 @@ import { createGame } from "./game";
 import PlayingBar from "./components/PlayingBar/PlayingBar";
 import Info from "./components/Info/Info";
 import Rules from "./components/Rules/Rules";
+import PersonalInfo from "./components/PersonalInfo/PersonalInfo";
 import "./App.css";
 
 export default class App extends Component {
@@ -23,7 +24,10 @@ export default class App extends Component {
             <div ref={el => (this.el = el)} />
             <PlayingBar />
           </div>
-          <Info player="player2" />
+          <div>
+            <Info player="player2" />
+            <PersonalInfo />
+          </div>
         </div>
       </div>
     );

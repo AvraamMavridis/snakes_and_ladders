@@ -28,6 +28,8 @@ export default class Info extends Component {
   render() {
     const playerContainer = classNames("player-info-container", {
       "playing-player": this.state.playingPlayer === this.props.player,
+      "player1": this.props.player === 'player1',
+      "player2": this.props.player === 'player2',
     });
 
     return (

@@ -12,11 +12,17 @@ const defaultConfig = {
     ]
 };
 
+/**
+ * Create the game
+ *
+ * @export
+ * @param {DOM.Element} parent
+ * @returns {Phaser.Game}
+ */
 export function createGame(parent){
   const config = {
     ...defaultConfig,
     parent,
   }
-  const game = new phaser.Game(config);
-  return game;
+  return new phaser.Game(config);
 };

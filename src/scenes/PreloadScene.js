@@ -5,6 +5,14 @@ import hero from '../assets/hero.png';
 import hero2 from '../assets/hero2.png';
 
 
+/**
+ * The sence is just for preloading some assets before the game
+ * starts
+ *
+ * @export
+ * @class PreloadScene
+ * @extends {phaser.Scene}
+ */
 export default class PreloadScene extends phaser.Scene {
     constructor () {
         super({
@@ -12,6 +20,11 @@ export default class PreloadScene extends phaser.Scene {
         })
     }
 
+    /**
+     * Preload assets
+     *
+     * @memberof PreloadScene
+     */
     preload () {
       this.load.image('board', board);
       this.load.spritesheet('dice', dice, { frameWidth: 46, frameHeight: 46 });
@@ -19,7 +32,8 @@ export default class PreloadScene extends phaser.Scene {
       this.load.spritesheet('player1', hero, { frameWidth: 128, frameHeight: 128 });
 
       setTimeout(() => {
+        // switch to the actual scene
         this.scene.start('initscene')
-      }, 1000);
+      }, 500);
     }
 }
