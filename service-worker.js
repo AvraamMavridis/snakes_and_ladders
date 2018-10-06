@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.2/workbox-sw.js");
 
 importScripts(
-  "/snakes_and_ladders/precache-manifest.c2b6a784eb0aecdf971fd7befe42ad87.js"
+  "/snakes_and_ladders/precache-manifest.f2af228b95bdfcb353d64881a8a441bf.js"
 );
 
 workbox.clientsClaim();
