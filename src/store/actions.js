@@ -1,9 +1,9 @@
 import { dispatch } from "../store";
 import {
+  RESET_GAME,
   STOP_DICE,
   SET_DICE,
   SET_PLAYER_PROPS,
-  ADD_PLAYER
 } from "./actionTypes";
 
 export function stopDice() {
@@ -20,6 +20,12 @@ export function setDice(val) {
   });
 }
 
+export function resetGame() {
+  dispatch({
+    action: RESET_GAME
+  });
+}
+
 export function setPlayerProps(name, props) {
   dispatch({
     action: SET_PLAYER_PROPS,
@@ -27,12 +33,5 @@ export function setPlayerProps(name, props) {
       name,
       props,
     }
-  });
-}
-
-export function addPlayer(payload) {
-  dispatch({
-    action: ADD_PLAYER,
-    payload
   });
 }

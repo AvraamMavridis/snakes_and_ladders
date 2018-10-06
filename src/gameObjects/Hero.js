@@ -13,6 +13,8 @@ import { setPlayerProps } from "../store/actions";
 export default class Hero extends GameObject {
   constructor(...args) {
     super(...args);
+    this.__initX = args[1];
+    this.__initY = args[2];
     this._gameObject.scaleX = 0.7;
     this._gameObject.scaleY = 0.7;
     this.createHeroAnimations();
@@ -27,6 +29,12 @@ export default class Hero extends GameObject {
    */
   stateDidUpdate({ state, prevState }) {
     this.setHeroPosition(state, prevState);
+
+    if(state.players[this.name].position === 1 && this.__initX && this.__initY){
+      this._gameObject.setX(this.__initX);
+      this._gameObject.setY(this.__initY);
+      this.createHeroAnimations();
+    }
   }
 
   /**

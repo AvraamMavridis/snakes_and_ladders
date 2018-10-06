@@ -1,9 +1,10 @@
 import {
+  RESET_GAME,
   STOP_DICE,
   SET_DICE,
   SET_PLAYER_PROPS,
-  ADD_PLAYER
 } from "./actionTypes";
+import initialState from './initialState';
 
 const getPlayer = (dice, current) => {
   let playingPlayer;
@@ -19,6 +20,12 @@ const getPlayer = (dice, current) => {
 
 export default (prevState, action, payload) => {
   switch (action) {
+    case RESET_GAME: {
+      return {
+        ...initialState,
+      }
+    }
+
     case STOP_DICE: {
       const playingPlayer = getPlayer(prevState.dice, prevState.playingPlayer);
 
@@ -29,10 +36,18 @@ export default (prevState, action, payload) => {
         reason: 'fromDice'
       };
 
+      let isOn100;
+      if (players.player1.position === 100) {
+        isOn100 = "You";
+      } else if (players.player2.position === 100) {
+        isOn100 = "Computer";
+      }
+
       return {
         ...prevState,
         players,
-        diceState: "pause"
+        diceState: "pause",
+        isOn100
       };
     }
 
@@ -44,12 +59,20 @@ export default (prevState, action, payload) => {
         rolls: 1 + prevState.players[player].rolls
       };
 
+      let isOn100;
+      if (players.player1.position === 100) {
+        isOn100 = "You";
+      } else if (players.player2.position === 100) {
+        isOn100 = "Computer";
+      }
+
       return {
         ...prevState,
         playingPlayer: getPlayer(payload, player),
         dice: payload,
         diceState: "rolling",
-        players
+        players,
+        isOn100
       };
     }
 
@@ -64,19 +87,6 @@ export default (prevState, action, payload) => {
         ...prevState,
         players
       };
-
-    case ADD_PLAYER: {
-      return {
-        ...prevState,
-        players: {
-          ...prevState.players,
-          [payload]: {
-            position: 1,
-            rolls: 0
-          }
-        }
-      };
-    }
 
     default:
       return prevState;

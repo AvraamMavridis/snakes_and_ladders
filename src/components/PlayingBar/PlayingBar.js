@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { setDice } from "../../store/actions";
+import React, { Component, Fragment } from "react";
+import { setDice, resetGame } from "../../store/actions";
 import { state } from "../../store";
 import "./PlayingBar.css";
 
@@ -9,7 +9,8 @@ class PlayingBar extends Component {
   state = {
     playingPlayer: "player1",
     dice: -1,
-    diceState: "stop"
+    diceState: "stop",
+    isOn100: undefined
   };
 
   componentDidMount() {
@@ -18,7 +19,8 @@ class PlayingBar extends Component {
         this.setState({
           playingPlayer: state.playingPlayer,
           dice: state.dice,
-          diceState: state.diceState
+          diceState: state.diceState,
+          isOn100: state.isOn100,
         });
       }
     });
@@ -30,28 +32,35 @@ class PlayingBar extends Component {
 
   render() {
     const player = this.getPlayerName();
+    const { diceState, playingPlayer, isOn100 } = this.state;
 
     return (
       <div className="playing-bar">
         <div className="labels-container">
-          <label>
-            <strong>Playing next: </strong>
-            <span className={player.toLowerCase()}>{player}</span>
-          </label>
-          <label>
-            <strong>Last Dice: </strong>
-            {this.state.dice > 0 ? this.state.dice : "-"}
-          </label>
+          {isOn100 ? (
+            <span className='winner'>{`Winner: ${isOn100}`}</span>
+          ) : (
+            <Fragment>
+              <label>
+                <strong>Playing next: </strong>
+                <span className={player.toLowerCase()}>{player}</span>
+              </label>
+              <label>
+                <strong>Last Dice: </strong>
+                {this.state.dice > 0 ? this.state.dice : "-"}
+              </label>
+            </Fragment>
+          )}
         </div>
         <div className="button-container">
           <button
             disabled={
-              this.state.diceState === "rolling" ||
-              this.state.playingPlayer === "player2"
+              (diceState === "rolling" || playingPlayer === "player2")
+              && !isOn100
             }
-            onClick={() => setDice()}
+            onClick={() => isOn100 ? resetGame() : setDice()}
           >
-            Roll the dice
+            { isOn100 ? 'Start new game' :  'Roll the dice' }
           </button>
         </div>
       </div>
