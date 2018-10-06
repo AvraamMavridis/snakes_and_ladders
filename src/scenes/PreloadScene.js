@@ -34,6 +34,6 @@ export default class PreloadScene extends phaser.Scene {
       setTimeout(() => {
         // switch to the actual scene
         this.scene.start('initscene')
-      }, 500);
+      }, 1500);
     }
 }
