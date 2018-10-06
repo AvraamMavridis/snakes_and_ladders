@@ -1,4 +1,4 @@
-# Snakes and Ladders (WIP)
+# Snakes and Ladders
 
 That's small pet project - personal challenge:
 
