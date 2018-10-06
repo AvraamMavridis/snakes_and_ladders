@@ -18,7 +18,6 @@ export default class GameObject {
 
     this.stateDidUpdate = this.stateDidUpdate.bind(this);
     this.state.subscribe({ next: this.stateDidUpdate });
-    this._gameObject.on('animationcomplete', this.onAnimationComplete)
   }
 
   /**
@@ -40,10 +39,6 @@ export default class GameObject {
    */
   stateDidUpdate(){
     throw new Error('Gameobject should implement this function');
-  }
-
-  onAnimationComplete(){
-    // console.info('Can be implemented by dirived classes')
   }
 
   /**

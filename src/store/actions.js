@@ -1,17 +1,10 @@
 import { dispatch } from "../store";
 import {
-  ROLL_DICE,
   STOP_DICE,
   SET_DICE,
   SET_PLAYER_PROPS,
   ADD_PLAYER
 } from "./actionTypes";
-
-export function rollDice() {
-  dispatch({
-    action: ROLL_DICE
-  });
-}
 
 export function stopDice() {
   dispatch({
@@ -19,10 +12,11 @@ export function stopDice() {
   });
 }
 
-export function setDice(payload) {
+export function setDice(val) {
+  const dice = val || Math.floor(Math.random() * 6) + 1;
   dispatch({
     action: SET_DICE,
-    payload
+    payload: dice,
   });
 }
 

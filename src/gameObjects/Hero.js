@@ -3,8 +3,6 @@ import inRange from "lodash/inRange";
 import { sleep } from "../helpers";
 import { setPlayerProps } from "../store/actions";
 
-window.setPlayerProps = setPlayerProps; // temporary for debuggin
-
 /**
  * Player Character
  *
@@ -18,7 +16,6 @@ export default class Hero extends GameObject {
     this._gameObject.scaleX = 0.7;
     this._gameObject.scaleY = 0.7;
     this.createHeroAnimations();
-    window.moveHero = this.hero;
   }
 
   /**
@@ -29,11 +26,7 @@ export default class Hero extends GameObject {
    * @memberof Hero
    */
   stateDidUpdate({ state, prevState }) {
-    if (prevState.playingPlayer !== this.name) return;
-
-    if (this._gameObject) {
-      this.setHeroPosition(state, prevState);
-    }
+    this.setHeroPosition(state, prevState);
   }
 
   /**
@@ -162,7 +155,7 @@ export default class Hero extends GameObject {
         y: this._gameObject.y + end.offsetY
       });
 
-      setPlayerProps(this.name, { position: end.position });
+      setPlayerProps(this.name, { position: end.position, reason: 'fromLadder' });
     }
 
     if (this.isOnSnakes(currentPosition)) {
@@ -173,11 +166,11 @@ export default class Hero extends GameObject {
         y: this._gameObject.y + end.offsetY
       });
 
-      setPlayerProps(this.name, { position: end.position });
+      setPlayerProps(this.name, { position: end.position, reason: 'fromSname' });
     }
 
     if(currentPosition > 100) {
-      setPlayerProps(this.name, { position: 200 - currentPosition });
+      setPlayerProps(this.name, { position: 200 - currentPosition, reason: 'greater100' });
     }
   }
 

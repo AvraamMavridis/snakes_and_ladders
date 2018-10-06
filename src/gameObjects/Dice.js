@@ -1,6 +1,6 @@
 import GameObject from "./GameObject";
 import shuffle from "lodash/shuffle";
-import { setDice, stopDice } from "../store/actions";
+import { stopDice } from "../store/actions";
 
 
 /**
@@ -24,8 +24,9 @@ export default class Dice extends GameObject {
    * @memberof Hero
    */
   stateDidUpdate({ state, prevState }) {
+    this.state = state;
     if (state.diceState === "rolling") {
-      this.animate();
+      this.animate(state.dice);
     }
   }
 
@@ -55,11 +56,11 @@ export default class Dice extends GameObject {
     this._gameObject = this.scene.add.sprite(x, y, "dice");
   }
 
-  animate() {
+  animate(diceNumber) {
     const frames = this.getFrames();
-    const pausingFramesIndexes = Object.keys(this.config.pausingFrames).map(i => +i);
-    const pausingFrames = frames.filter(fr => pausingFramesIndexes.includes(fr.frame));
-    
+    let pausingFrame = this.config.pausingFrames[`${diceNumber}`];
+    pausingFrame = frames.find(fr => pausingFrame === fr.frame);
+
     this.createAnimation({
       key: "roll",
       frames,
@@ -67,15 +68,13 @@ export default class Dice extends GameObject {
     });
   
     this._gameObject.anims.play("roll");
-
-    const f = pausingFrames[Math.floor(Math.random() * 12)];
+    const currentFrame = pausingFrame.frame;
 
     this.moveAsync({ x: Math.random() * 400 + 50, y: Math.random() * 400 + 50,
       onComplete: () => {
         this._gameObject.anims.stop();
-        this._gameObject.setFrame(f.frame);
+        this._gameObject.setFrame(currentFrame);
         stopDice();
-        setDice(this.config.pausingFrames[`${f.frame}`]);
       }
     }, 1700);
   }

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { rollDice } from "../../store/actions";
+import { setDice } from "../../store/actions";
 import { state } from "../../store";
 import "./PlayingBar.css";
+
+window.__setDice = setDice;
 
 class PlayingBar extends Component {
   state = {
@@ -12,22 +14,12 @@ class PlayingBar extends Component {
 
   componentDidMount() {
     state.subscribe({
-      next: ({ state, prevState }) => {
+      next: ({ state }) => {
         this.setState({
           playingPlayer: state.playingPlayer,
           dice: state.dice,
           diceState: state.diceState
         });
-
-        if (
-          (state.playingPlayer === "player2" &&
-            prevState.playingPlayer === "player1") 
-            // || (state.playingPlayer === "player2" &&
-            // prevState.playingPlayer === "player2" &&
-            // state.dice === 6)
-        ) {
-          setTimeout(() => rollDice(), 3000);
-        }
       }
     });
   }
@@ -43,7 +35,7 @@ class PlayingBar extends Component {
       <div className="playing-bar">
         <div className="labels-container">
           <label>
-            <strong>Playing: </strong>
+            <strong>Playing next: </strong>
             <span className={player.toLowerCase()}>{player}</span>
           </label>
           <label>
@@ -57,7 +49,7 @@ class PlayingBar extends Component {
               this.state.diceState === "rolling" ||
               this.state.playingPlayer === "player2"
             }
-            onClick={rollDice}
+            onClick={() => setDice()}
           >
             Roll the dice
           </button>

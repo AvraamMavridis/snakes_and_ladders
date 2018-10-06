@@ -1,14 +1,42 @@
 import {
-  ROLL_DICE,
   STOP_DICE,
   SET_DICE,
   SET_PLAYER_PROPS,
   ADD_PLAYER
 } from "./actionTypes";
 
+const getPlayer = (dice, current) => {
+  let playingPlayer;
+
+  if(dice === 6){
+    playingPlayer = current;
+  } else {
+    playingPlayer = current === 'player1' ? 'player2' : 'player1';
+  }
+
+  return playingPlayer;
+}
+
 export default (prevState, action, payload) => {
   switch (action) {
-    case ROLL_DICE: {
+    case STOP_DICE: {
+      const playingPlayer = getPlayer(prevState.dice, prevState.playingPlayer);
+
+      const players = { ...prevState.players };
+      players[playingPlayer] = {
+        ...players[playingPlayer],
+        position: prevState.dice + prevState.players[playingPlayer].position,
+        reason: 'fromDice'
+      };
+
+      return {
+        ...prevState,
+        players,
+        diceState: "pause"
+      };
+    }
+
+    case SET_DICE: {
       const player = prevState.playingPlayer;
       const players = { ...prevState.players };
       players[player] = {
@@ -18,37 +46,9 @@ export default (prevState, action, payload) => {
 
       return {
         ...prevState,
-        diceState: "rolling",
-        players
-      };
-    }
-
-    case STOP_DICE:
-      return {
-        ...prevState,
-        diceState: "pause"
-      };
-
-    case SET_DICE: {
-      const player = prevState.playingPlayer;
-      const players = { ...prevState.players };
-      players[player] = {
-        ...players[player],
-        position: payload + prevState.players[player].position
-      };
-
-      let playingPlayer;
-
-      if(payload === 6){
-        playingPlayer = player;
-      } else {
-        playingPlayer = player === 'player1' ? 'player2' : 'player1';
-      }
-
-      return {
-        ...prevState,
-        playingPlayer,
+        playingPlayer: getPlayer(payload, player),
         dice: payload,
+        diceState: "rolling",
         players
       };
     }
