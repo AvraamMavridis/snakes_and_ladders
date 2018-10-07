@@ -1,7 +1,7 @@
 {
   "main.css": "/snakes_and_ladders/static/css/main.1a9044bc.chunk.css",
-  "main.js": "/snakes_and_ladders/static/js/main.8e83b6d6.chunk.js",
-  "main.js.map": "/snakes_and_ladders/static/js/main.8e83b6d6.chunk.js.map",
+  "main.js": "/snakes_and_ladders/static/js/main.2602ee80.chunk.js",
+  "main.js.map": "/snakes_and_ladders/static/js/main.2602ee80.chunk.js.map",
   "static/js/1.f91e2d99.chunk.js": "/snakes_and_ladders/static/js/1.f91e2d99.chunk.js",
   "static/js/1.f91e2d99.chunk.js.map": "/snakes_and_ladders/static/js/1.f91e2d99.chunk.js.map",
   "runtime~main.js": "/snakes_and_ladders/static/js/runtime~main.ab27efa4.js",
@@ -12,6 +12,6 @@
   "static/media/dice.png": "/snakes_and_ladders/static/media/dice.6dd8eb80.png",
   "static/css/main.1a9044bc.chunk.css.map": "/snakes_and_ladders/static/css/main.1a9044bc.chunk.css.map",
   "index.html": "/snakes_and_ladders/index.html",
-  "precache-manifest.f2af228b95bdfcb353d64881a8a441bf.js": "/snakes_and_ladders/precache-manifest.f2af228b95bdfcb353d64881a8a441bf.js",
+  "precache-manifest.7b6358c075a8925e0298db0fdf4cef8a.js": "/snakes_and_ladders/precache-manifest.7b6358c075a8925e0298db0fdf4cef8a.js",
   "service-worker.js": "/snakes_and_ladders/service-worker.js"
 }

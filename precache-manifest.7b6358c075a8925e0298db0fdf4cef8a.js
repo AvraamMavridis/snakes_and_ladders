@@ -20,19 +20,19 @@ self.__precacheManifest = [
     "url": "/snakes_and_ladders/static/js/runtime~main.ab27efa4.js"
   },
   {
-    "revision": "8e83b6d6af978e67f0fb",
-    "url": "/snakes_and_ladders/static/js/main.8e83b6d6.chunk.js"
+    "revision": "2602ee805521e9003195",
+    "url": "/snakes_and_ladders/static/js/main.2602ee80.chunk.js"
   },
   {
     "revision": "f91e2d995b45020645df",
     "url": "/snakes_and_ladders/static/js/1.f91e2d99.chunk.js"
   },
   {
-    "revision": "8e83b6d6af978e67f0fb",
+    "revision": "2602ee805521e9003195",
     "url": "/snakes_and_ladders/static/css/main.1a9044bc.chunk.css"
   },
   {
-    "revision": "3a3e2ccdfd382833049e850c09a5d7fa",
+    "revision": "23979746ea06745183794f331d9f9a64",
     "url": "/snakes_and_ladders/index.html"
   }
 ];
