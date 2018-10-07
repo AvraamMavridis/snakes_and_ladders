@@ -39,7 +39,7 @@ export default class Dice extends GameObject {
   getFrames() {
     let frames = this.scene.anims.generateFrameNumbers("dice");
     frames = frames.filter(
-      fr => fr.frame > 15 && fr.frame < frames.length - 15
+      fr => (fr.frame > 15 && fr.frame < frames.length - 15) || fr.frame === 0
     );
     return shuffle(frames);
   }
